@@ -18,7 +18,7 @@ def save_boxed_img(
     ids = list(coco.imgs.keys())
     ann_ids = coco.getAnnIds(imgIds=ids[0])
     anns = [coco.loadAnns(ann_id)[0] for ann_id in ann_ids]
-    if ann == "insciption":
+    if ann == "inscription":
         anns = [i for i in anns if coco.cats[i["category_id"]]["name"] == "Insciption"]
     elif ann == "seal":
         anns = [i for i in anns if coco.cats[i["category_id"]]["name"] == "Seal"]
@@ -63,7 +63,23 @@ def save_boxed_img(
 if __name__ == "__main__":
     img_path = "src/assets/image.png"
     coco_json_path = "src/assets/coco_labels.json"
-    output_path = "src/assets/image_box.png"
+    # box seal
+    output_path = "src/assets/image_box_seal.png"
     ann = "seal"
     only_show_anns = False
+    save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
+    # only box seal
+    output_path = "src/assets/image_only_box_seal.png"
+    ann = "seal"
+    only_show_anns = True
+    save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
+    # box inscription
+    output_path = "src/assets/image_box_inscription.png"
+    ann = "inscription"
+    only_show_anns = False
+    save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
+    # only box inscription
+    output_path = "src/assets/image_only_box_inscription.png"
+    ann = "inscription"
+    only_show_anns = True
     save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
