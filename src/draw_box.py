@@ -1,3 +1,4 @@
+# Date: 2024/3/21
 import os
 import io
 import numpy as np
@@ -11,7 +12,17 @@ def save_boxed_img(
     img_path, coco_json_path, output_path, ann="both", only_show_anns=False
 ):
     """
-    ann: str, 'seal', 'insciption', 'both'
+    Draw boxes of objects in specified image, based coco json format annotations
+    ---
+    img_path: 
+        The path of image.
+    coco_json_path: 
+        The path of json which include the annotation in coco format.
+    ann: 
+        Which kind of object be boxed. Could be 'seal', 'insciption' or 'both'.
+    only_show_anns: 
+        If True, the other pixels (exclude the pixels in boxes) 
+        of the image will be changed to white.
     """
     img = plt.imread(img_path)
     coco = COCO(coco_json_path)
@@ -34,7 +45,10 @@ def save_boxed_img(
             for py in range(y, y + height + 1)
         ]  # for 'only_show_anns'
         ann_rectangle = Rectangle(
-            xy=[x, y], width=width, height=height, fill=False # linewidth=
+            xy=[x, y],
+            width=width,
+            height=height,
+            fill=False,  # linewidth=
         )
         ann_rectangles.append(ann_rectangle)
     if only_show_anns:  # for 'only_show_anns'
@@ -61,25 +75,6 @@ def save_boxed_img(
 
 
 if __name__ == "__main__":
-    img_path = "src/assets/image.png"
-    coco_json_path = "src/assets/coco_labels.json"
-    # box seal
-    output_path = "src/assets/image_box_seal.png"
-    ann = "seal"
-    only_show_anns = False
-    save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
-    # only box seal
-    output_path = "src/assets/image_only_box_seal.png"
-    ann = "seal"
-    only_show_anns = True
-    save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
-    # box inscription
-    output_path = "src/assets/image_box_inscription.png"
-    ann = "inscription"
-    only_show_anns = False
-    save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
-    # only box inscription
-    output_path = "src/assets/image_only_box_inscription.png"
-    ann = "inscription"
-    only_show_anns = True
-    save_boxed_img(img_path, coco_json_path, output_path, ann, only_show_anns)
+    img_path = "../assets/image.png"
+    coco_json_path = "../assets/coco_labels.json"
+    save_boxed_img(img_path, coco_json_path, output_path="test.png")

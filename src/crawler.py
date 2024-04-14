@@ -37,7 +37,7 @@ class NPMCrawler:
     def init_chrome_driver(self, headless=False):
         """
         Init Chrome driver
-
+        ---
         headless: bool, deciding whether to run Chrome in headless mode.
         """
         chrome_options = Options()
@@ -62,7 +62,7 @@ class NPMCrawler:
     def get_existing_imgs(self, filter_cr=True):
         """
         Get existed images (excluding currend downloading image).
-
+        ---
         cr: bool, deciding filter crdownload or not.
         """
         imgs_dl = set(os.listdir(self.images_dir))
@@ -224,10 +224,9 @@ def is_normal(images_dir, map_csv_path):
 
 
 if __name__ == "__main__":
-    htmls_dir = "data/htmls"
-    images_dir = "data/images"
-    map_csv_path = "data/map.csv"
-
+    htmls_dir = "../data/Chinese-Painting/htmls"
+    images_dir = "../data/Chinese-Painting/images"
+    map_csv_path = "../data/Chinese-Painting/map.csv"
     err = "does't exist, please create it or specify another."
     for path in [htmls_dir, images_dir, map_csv_path]:
         if not os.path.exists(path):
