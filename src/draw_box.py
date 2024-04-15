@@ -1,9 +1,5 @@
 # Date: 2024/3/21
-import os
-import io
-import numpy as np
 import matplotlib.pyplot as plt
-import cv2
 from matplotlib.patches import Rectangle
 from pycocotools.coco import COCO
 
@@ -18,6 +14,8 @@ def save_boxed_img(
         The path of image.
     coco_json_path: 
         The path of json which include the annotation in coco format.
+    output_path:
+        The path of output image to save.
     ann: 
         Which kind of object be boxed. Could be 'seal', 'insciption' or 'both'.
     only_show_anns: 
@@ -61,7 +59,7 @@ def save_boxed_img(
     # fig config
     fig, ax = plt.subplots()
     dpi = 300
-    w, h, _ = [i / 300 for i in img.shape]
+    w, h, _ = [i / dpi for i in img.shape]
     fig.set_size_inches(w, h)
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
     ax.set_axis_off()

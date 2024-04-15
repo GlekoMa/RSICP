@@ -231,7 +231,7 @@ if __name__ == "__main__":
     for path in [htmls_dir, images_dir, map_csv_path]:
         if not os.path.exists(path):
             print(f"Error: {path} {err}")
-            sys.exit()
+            sys.exit(1)
     if is_normal(images_dir, map_csv_path) is True:
         crawler = NPMCrawler(htmls_dir, images_dir, map_csv_path)
         crawler.run()

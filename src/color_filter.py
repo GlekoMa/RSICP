@@ -9,32 +9,28 @@
 
 import numpy as np
 from numpy.typing import NDArray
-from skimage import io, color
+from skimage import color
 import matplotlib.pyplot as plt
+import torch
+from torchvision.io import write_png
 
 
-def savefig(img: NDArray[np.uint8], output_path: str) -> None:
+def savefig(img: NDArray[np.float32], output_path: str) -> None:
     """
-    Save numpy array to image format.
+    Save numpy array to image format. Note: items of array need to be in [0, 1].
     """
-    fig, ax = plt.subplots()
-    dpi = 300
-    w, h, _ = [i / 300 for i in img.shape]
-    fig.set_size_inches(w, h)
-    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-    ax.set_axis_off()
-    ax.imshow(img)
-    fig.savefig(output_path, dpi=300)
+    img = (torch.tensor(img).permute(2, 0, 1) * 255).to(torch.uint8)
+    write_png(img, output_path)
 
 
 def filter_red_by_lab(
-    rgba_img_array, a_threshold=5, b_threshold=-5, only_keep_mask=False
+    rgb_img_array, a_threshold=5, b_threshold=-5, only_keep_mask=False
 ):
     """
     Filter the other colors using lab color space to only keep red pixels.
     ---
-    rgba_img_array:
-        Usually loaded from a `png` format image.
+    rgb_img_array:
+        RGB color space format image array and the shape of it need to be (x, y, 3).
     a_threshold:
         The threshold value for the 'a' channel in the Lab color space.
         Pixels with 'a' channel values greater this threshold will be considered as red.
@@ -45,8 +41,7 @@ def filter_red_by_lab(
         If True, the other pixels (exclude the red pixels) of the image will be changed
         to white. Otherwise, only the red pixels will be changed to white.
     """
-    rgb = color.rgba2rgb(rgba_img_array)
-    lab = color.rgb2lab(rgb, illuminant="D65")
+    lab = color.rgb2lab(rgb_img_array, illuminant="D65")
     a_cond = lab[:, :, 1] > a_threshold
     b_cond = lab[:, :, 2] < b_threshold
     red_cond = a_cond | b_cond
@@ -61,13 +56,13 @@ def filter_red_by_lab(
 # The default value of s_threshold and v_threshold is according to
 # DOI: 10.27307/d.cnki.gsjtu.2017.000228 (p63, 64, 81).
 def filter_black_by_hsv(
-    rgba_img_array, s_threshold=0.17, v_threshold=(0.18, 0.86), only_keep_mask=False
+    rgb_img_array, s_threshold=0.17, v_threshold=(0.18, 0.86), only_keep_mask=False
 ):
     """
     Filter the other colors using hsv color space to only keep black pixels.
     ---
-    rgba_img_array:
-        Usually loaded from a `png` format image.
+    rgb_img_array:
+        RGB color space format image array and the shape of it need to be (x, y, 3).
     s_threshold:
         The threshold value for the 'saturation' channel in the hsv color space.
         Pixels with 'saturation' channel values below this threshold will be
@@ -80,9 +75,7 @@ def filter_black_by_hsv(
         If True, the other pixels (exclude the black pixels) of the image will be changed
         to white. Otherwise, only the red pixels will be changed to white.
     """
-    rgba_img_array = img
-    rgb = color.rgba2rgb(rgba_img_array)
-    hsv = color.rgb2hsv(rgb)
+    hsv = color.rgb2hsv(rgb_img_array)
     # the threshold of black
     s_cond = hsv[:, :, 1] < s_threshold
     v_cond = (hsv[:, :, 2] > v_threshold[0]) & (hsv[:, :, 2] < v_threshold[1])
@@ -96,7 +89,7 @@ def filter_black_by_hsv(
 
 
 if __name__ == "__main__":
-    img = io.imread("../assets/image.png")
+    img = plt.imread("../assets/image.png")
     # filter others to keep red
     img_red_kept = filter_red_by_lab(img)
     savefig(img_red_kept, output_path="test_red.png")
