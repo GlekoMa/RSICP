@@ -49,7 +49,7 @@ def segment_fore_back(img: NDArray[np.float32], return_process_imgs=False):
     threshold_value = filters.threshold_otsu(smooth_img)
     binary_img = invert_color_by_assumption(smooth_img > threshold_value)
     closed_img = morphology.closing(binary_img, morphology.square(3))
-    if return_process_imgs is False:
+    if not return_process_imgs:
         return closed_img
     else:
         return [img, gray_img, smooth_img, binary_img, closed_img]
@@ -61,9 +61,9 @@ if __name__ == "__main__":
     random.shuffle(imgs)
     
     fig, axes = plt.subplots(5, 5, constrained_layout=True, figsize=(10, 10))
-    for j in range(5):
-        img = plt.imread(imgs[j])
-        for i, v in enumerate(segment_fore_back(img, return_process_imgs=True)):
-            axes[j, i].imshow(v, cmap=plt.cm.gray)
-            axes[j, i].axis("off")
+    for i in range(5):
+        img = plt.imread(imgs[i])
+        for j, v in enumerate(segment_fore_back(img, return_process_imgs=True)):
+            axes[i, j].imshow(v, cmap=plt.cm.gray)
+            axes[i, j].axis("off")
     plt.show()
