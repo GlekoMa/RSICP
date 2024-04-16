@@ -1,4 +1,5 @@
-# TODO: just a demo, need a formal checking
+# Date: 2024/4/15 
+# Note: Need run 'split_si_against_nosi.py' first
 import os
 from pathlib import Path
 from pycocotools.coco import COCO
@@ -19,7 +20,7 @@ def get_boxes_dic(coco_json_path):
     images_id_name_dic = {
         v["id"]: Path(v["file_name"]).name for v in coco.imgs.values()
     }
-    images_id_which_has_sr = set([v["image_id"] for v in coco.anns.values()])
+    images_id_which_has_si = set([v["image_id"] for v in coco.anns.values()])
 
     def get_box_dic_part(image_id):
         anns_single = [v for v in coco.anns.values() if v["image_id"] == image_id]
@@ -29,7 +30,7 @@ def get_boxes_dic(coco_json_path):
             for k, v in category_dic.items()
         }
 
-    return {images_id_name_dic[i]: get_box_dic_part(i) for i in images_id_which_has_sr}
+    return {images_id_name_dic[i]: get_box_dic_part(i) for i in images_id_which_has_si}
 
 
 def crop_boxes(img_path, coco_json_path, output_dir, ann="both"):
@@ -67,8 +68,8 @@ if __name__ == "__main__":
     data_root = Path("../data")
     coco_json_root = data_root / "Chinese-Painting-s800-n240"
     coco_json_path = coco_json_root / "result.json"
-    img_path = data_root / "Chinese-Painting-s800-n240-sr"
-    output_dir = "test"
+    img_path = data_root / "temp/Chinese-Painting-s800-n240-si"
+    output_dir = data_root / "temp/seal_inscription_boxes"
     os.makedirs(output_dir)
     crop_boxes(img_path, coco_json_path, output_dir)
 

@@ -1,4 +1,4 @@
-# Date: 2024.2
+# Date: 2024/2
 #
 # Crawl all the calligraphy and painting images (include page HTML)
 # from the National Palace Museum (Taipei).
@@ -205,7 +205,6 @@ def is_normal(images_dir, map_csv_path):
     elif imgs_dl != imgs_info_exist:
         cond_1 = len(imgs_info_exist - imgs_dl) == 0
         cond_2 = len(imgs_dl - imgs_info_exist) == 1
-        # This situation have handled in main.py (NPMCrawler.fix)
         if cond_1 and cond_2:
             if __name__ == "__main__":
                 print("No error, good!")
