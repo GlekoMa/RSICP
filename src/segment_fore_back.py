@@ -41,7 +41,7 @@ def segment_fore_back(img: NDArray[np.float32], return_process_imgs=False):
     img:
         Original image.
     return_process_imgs:
-        If False, return closed image. If True, return [original, gray, smooth,
+        If False, return closed image. If True, return [origin, gray, smooth,
         binary, closed] images list.
     """
     gray_img = color.rgb2gray(img)
