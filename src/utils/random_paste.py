@@ -37,11 +37,13 @@ class ObjMap:
         obj_center_x = random.randint(0 + obj_w_half + 1, img_w - obj_w_half - 2)
         obj_center_y = random.randint(0 + obj_h_half + 1, img_h - obj_h_half - 2)
         # get object's location of the image
+        obj_idx_x_start = obj_center_x - obj_w_half
         obj_idx_x = list(
-            range(obj_center_x - obj_w_half, obj_center_x + obj_w_half + 1)
+            range(obj_idx_x_start, obj_idx_x_start + obj_w)
         )
+        obj_idx_y_start = obj_center_y - obj_h_half
         obj_idx_y = list(
-            range(obj_center_y - obj_h_half, obj_center_y + obj_h_half + 1)
+            range(obj_idx_y_start, obj_idx_y_start + obj_h)
         )
         # get the object location of image and its idx:val dict
         obj_location = [(j, i) for i in obj_idx_x for j in obj_idx_y]
