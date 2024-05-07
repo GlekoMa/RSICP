@@ -89,7 +89,7 @@ def filter_black_by_hsv(
 
 
 if __name__ == "__main__":
-    img = plt.imread("../assets/image.png")
+    img = plt.imread("../../assets/image.png")
     # filter others to keep red
     img_red_kept = filter_red_by_lab(img)
     savefig(img_red_kept, output_path="test_red.png")

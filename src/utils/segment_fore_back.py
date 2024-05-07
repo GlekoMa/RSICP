@@ -56,7 +56,7 @@ def segment_fore_back(img: NDArray[np.float32], return_process_imgs=False):
 
 
 if __name__ == "__main__":
-    img_nosi_root = "../data/temp/Chinese-Painting-s800-n240-nosi"
+    img_nosi_root = "../../data/temp/Chinese-Painting-s800-n240-nosi"
     imgs = [Path(img_nosi_root) / i for i in os.listdir(img_nosi_root)]
     random.shuffle(imgs)
     

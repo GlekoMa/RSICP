@@ -20,8 +20,8 @@ def resize_image_to_800(ori_path, tar_path):
 
 
 if __name__ == "__main__":
-    ori_root = "../data/Chinese-Painting/images"
-    tar_root = "../data/Chinese-Painting-s800/images"
+    ori_root = "../../data/Chinese-Painting/images"
+    tar_root = "../../data/Chinese-Painting-s800/images"
     os.makedirs(tar_root)
     image_names = os.listdir(ori_root)
     ori_paths = [os.path.join(ori_root, name) for name in image_names]

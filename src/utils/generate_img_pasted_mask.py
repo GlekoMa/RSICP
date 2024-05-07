@@ -36,7 +36,7 @@ def generate_img_pasted_mask_multi(img_dir, obj_dir, img_pasted_dir, mask_dir):
 
 
 if __name__ == "__main__":
-    data_root = Path("../data")
+    data_root = Path("../../data")
     obj_dir = str(data_root / "seal-inscription-boxes-filtered-manual")
     img_dir = str(data_root / "Chinese-Painting-s800-n240-nosi-manual")
     img_pasted_dir = str(data_root / "imgs_pasted")

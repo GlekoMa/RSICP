@@ -223,9 +223,9 @@ def is_normal(images_dir, map_csv_path):
 
 
 if __name__ == "__main__":
-    htmls_dir = "../data/Chinese-Painting/htmls"
-    images_dir = "../data/Chinese-Painting/images"
-    map_csv_path = "../data/Chinese-Painting/map.csv"
+    htmls_dir = "../../data/Chinese-Painting/htmls"
+    images_dir = "../../data/Chinese-Painting/images"
+    map_csv_path = "../../data/Chinese-Painting/map.csv"
     err = "does't exist, please create it or specify another."
     for path in [htmls_dir, images_dir, map_csv_path]:
         if not os.path.exists(path):

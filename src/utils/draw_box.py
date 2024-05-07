@@ -73,6 +73,6 @@ def save_boxed_img(
 
 
 if __name__ == "__main__":
-    img_path = "../assets/image.png"
-    coco_json_path = "../assets/coco_labels.json"
+    img_path = "../../assets/image.png"
+    coco_json_path = "../../assets/coco_labels.json"
     save_boxed_img(img_path, coco_json_path, output_path="test.png")

@@ -46,7 +46,7 @@ def auto_filter_si_save_based_dir(input_dir, output_dir):
 
 
 if __name__ == "__main__":
-    root = Path("../data/temp")
+    root = Path("../../data/temp")
     input_dir = str(root / "seal_inscription_boxes")
     output_dir = str(root / "seal_inscription_boxes_filtered")
     os.makedirs(output_dir)

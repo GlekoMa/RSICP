@@ -156,18 +156,18 @@ def random_paste_multi(img: NDArray[np.float32], objs: list[NDArray[np.float32]]
 
 
 if __name__ == "__main__":
-    img = plt.imread("../assets/image_nosi.png")
-    obj = plt.imread("../assets/seal.png")
-    obj2 = plt.imread("../assets/inscription.png")
+    img = plt.imread("../../assets/image_nosi.png")
+    obj = plt.imread("../../assets/seal.png")
+    obj2 = plt.imread("../../assets/inscription.png")
     objs = [obj, obj2]
 
     # Plot all process_imgs
-    #process_imgs = random_paste(img, obj, process_type="all")
-    #fig, axes = plt.subplots(1, 5, constrained_layout=True, figsize=(12, 3))
-    #for i, ax in enumerate(axes):
-    #    ax.imshow(process_imgs[i])
-    #    ax.axis("off")
-    #plt.show()
+    process_imgs = random_paste(img, obj, process_type="all")
+    fig, axes = plt.subplots(1, 5, constrained_layout=True, figsize=(12, 3))
+    for i, ax in enumerate(axes):
+        ax.imshow(process_imgs[i])
+        ax.axis("off")
+    plt.show()
 
     # Plot multi pasted img
     img_pasted, mask = random_paste_multi(img, objs)

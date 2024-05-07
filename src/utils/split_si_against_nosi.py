@@ -31,8 +31,8 @@ def split_si_against_nosi(images_dir, coco_json_path, output_si_dir, output_nosi
 
 
 if __name__ == "__main__":
-    images_dir = "../data/Chinese-Painting-s800-n240/images"
-    coco_json_path = "../data/Chinese-Painting-s800-n240/result.json"
-    output_si_dir = "../data/temp/Chinese-Painting-s800-n240-si"
-    output_nosi_dir = "../data/temp/Chinese-Painting-s800-n240-nosi"
+    images_dir = "../../data/Chinese-Painting-s800-n240/images"
+    coco_json_path = "../../data/Chinese-Painting-s800-n240/result.json"
+    output_si_dir = "../../data/temp/Chinese-Painting-s800-n240-si"
+    output_nosi_dir = "../../data/temp/Chinese-Painting-s800-n240-nosi"
     split_si_against_nosi(images_dir, coco_json_path, output_si_dir, output_nosi_dir)

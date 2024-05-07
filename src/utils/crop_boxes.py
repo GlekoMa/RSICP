@@ -65,7 +65,7 @@ def crop_boxes(img_dir, coco_json_path, output_dir, ann="both"):
 
 
 if __name__ == "__main__":
-    data_root = Path("../data")
+    data_root = Path("../../data")
     coco_json_root = data_root / "Chinese-Painting-s800-n240"
     coco_json_path = coco_json_root / "result.json"
     img_dir = data_root / "temp/Chinese-Painting-s800-n240-si"
