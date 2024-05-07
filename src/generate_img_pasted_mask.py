@@ -1,4 +1,5 @@
 import os
+from os.path import basename
 import random
 from pathlib import Path
 import matplotlib.pyplot as plt
@@ -13,8 +14,15 @@ def generate_img_pasted_mask(img_path, obj_dir, img_pasted_path, mask_path):
     obj_to_pasted_paths = random.sample(obj_paths, random.randint(1, 6))
     objs_to_pasted = [plt.imread(i) for i in obj_to_pasted_paths]
     img_pasted, mask = random_paste_multi(img, objs_to_pasted)
-    savefig(img_pasted, img_pasted_path)
-    savefig(mask[:, :, None] / 255, mask_path)
+    if mask.sum() == 0:
+        print("\033[93m[WARN] no loc to paste obj, generate empty mask\033[0m")
+        print(f"\033[93m[WARN]     img_name: {basename(img_path).split('.')[0]}\033[0m")
+        print(f"\033[93m[WARN]     img_id: {basename(mask_path).split('_')[0]}\033[0m")
+        return None
+    else:
+        savefig(img_pasted, img_pasted_path)
+        savefig(mask[:, :, None] / 255, mask_path)
+        return None
 
 
 def generate_img_pasted_mask_multi(img_dir, obj_dir, img_pasted_dir, mask_dir):

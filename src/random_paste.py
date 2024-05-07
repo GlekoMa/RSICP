@@ -51,8 +51,10 @@ class ObjMap:
     def random_location_not_conflict(self) -> dict[tuple[int], NDArray[np.float32]]:
         """
         Just like random_location, but if the object box has conflict with the
-        image's foreground, regenerate. Note: If this function can't find a good 
-        location, it will return an empty dict `{}`.
+        image's foreground, regenerate. 
+        ---
+        Note: If this function can't find a good location, it will return an
+        empty dict `{}`.
         """
         self.img_binary = segment_fore_back(self.img)
         self.img_rgb_binary = np.stack([self.img_binary for _ in range(3)], axis=-1)
@@ -60,10 +62,11 @@ class ObjMap:
         flag = 1
         while sum([not all(self.img_rgb_binary[i]) for i in obj_location.keys()]) != 0:
             obj_location = self.random_location()
-            print(f"run random location: {flag}")
+            if flag in [1, 10, 20, 30, 40, 50]:
+                print(f"[INFO]         run random location: {flag}")
             if flag == 50:
                 obj_location = {}
-                print(f"Warning: Can't find a good location")
+                print("\033[93m[WARN]         can't find a good location\033[0m")
                 break
             flag += 1
         return obj_location
@@ -94,6 +97,9 @@ def random_paste(
         'none': return pasted image;
         'mask': return [origin_pasted, mask];
         'all' : return [origin, binary, mask, binary_pasted, origin_pasted] images list.
+    ---
+    Note: This function maybe can't find a good location, in this situation,
+    it's mask will be filled of 0.
     """
     def get_mask(img, obj_map):
         mask = np.zeros(img.shape[:2], dtype=np.uint8)
@@ -134,14 +140,18 @@ def random_paste(
 
 
 def random_paste_multi(img: NDArray[np.float32], objs: list[NDArray[np.float32]]) -> list[NDArray[np.float32], NDArray[np.uint8]]:
-    print("------ start random paste multi ------")
+    """
+    Note: This function maybe can't find a good location, in this situation,
+    it's mask will be filled of 0.
+    """
+    print("[INFO] start random paste multi")
     mask = np.zeros(img.shape[:2])
     for obj in objs:
-        print("=> get one obj, random paste go!!!")
+        print("[INFO]     got one obj, run random paste")
         img, mask_obj = random_paste(img, obj, process_type="mask")
         mask += mask_obj * (np.max(mask) + 1)
-        print("=> pasted one obj, good!!!")
-    print("------ end random paste multi ------")
+        print("[INFO]     pasted one obj, good")
+    print("[INFO] end random paste multi\n")
     return [img, mask.astype(np.uint8)]
 
 
