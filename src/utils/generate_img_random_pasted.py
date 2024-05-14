@@ -7,7 +7,7 @@ from random_paste import random_paste_multi
 from color_filter import savefig
 
 
-def generate_img_pasted_mask(img_path, obj_dir, img_pasted_path, mask_path, boxes_path):
+def generate_img_random_pasted(img_path, obj_dir, img_pasted_path, mask_path, boxes_path):
     img = plt.imread(img_path)
     obj_names = os.listdir(obj_dir)
     obj_paths = [os.path.join(obj_dir, i) for i in obj_names]
@@ -28,7 +28,7 @@ def generate_img_pasted_mask(img_path, obj_dir, img_pasted_path, mask_path, boxe
 
 
 
-def generate_img_pasted_mask_multi(img_dir, obj_dir, img_pasted_dir, mask_dir, boxes_dir):
+def generate_img_random_pasted_multi(img_dir, obj_dir, img_pasted_dir, mask_dir, boxes_dir):
     img_names = os.listdir(img_dir)
     img_paths = [os.path.join(img_dir, i) for i in img_names]
     for i in range(len(img_paths)):
@@ -36,7 +36,7 @@ def generate_img_pasted_mask_multi(img_dir, obj_dir, img_pasted_dir, mask_dir, b
         img_pasted_path = os.path.join(img_pasted_dir, f"{i+1}.png")
         mask_path = os.path.join(mask_dir, f"{i+1}_mask.png")
         boxes_path = os.path.join(boxes_dir, f"{i+1}_boxes.txt")
-        generate_img_pasted_mask(img_path, obj_dir, img_pasted_path, mask_path, boxes_path)
+        generate_img_random_pasted(img_path, obj_dir, img_pasted_path, mask_path, boxes_path)
 
 
 if __name__ == "__main__":
@@ -47,6 +47,6 @@ if __name__ == "__main__":
     img_pasted_dir = str(data_root / output_dir / "imgs_pasted")
     mask_dir = str(data_root / output_dir / "masks")
     boxes_dir = str(data_root / output_dir / "boxes")
-    generate_img_pasted_mask_multi(img_dir, obj_dir, img_pasted_dir, mask_dir, boxes_dir)
+    generate_img_random_pasted_multi(img_dir, obj_dir, img_pasted_dir, mask_dir, boxes_dir)
 
 
