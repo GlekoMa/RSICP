@@ -1,12 +1,11 @@
 # Date: 2024/4/15 
-# Note: Need run 'split_si_against_nosi.py' first
 import os
 from pathlib import Path
 from pycocotools.coco import COCO
 from torchvision.io import read_image, write_png
 
 
-def get_boxes_dic(coco_json_path):
+def get_boxes_dic(coco_json_path: str):
     """
     Get a dictionary mapping image file names to lists of bounding boxes
     for seals and inscriptions. Such as
