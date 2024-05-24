@@ -11,8 +11,8 @@ def filter_boxes(boxes_dir, output_dir):
     output directory.
     """
     os.makedirs(output_dir)
-    imgs_path = [Path(boxes_dir) / i for i in os.listdir(boxes_dir)]
-    for img_path in imgs_path:
+    img_paths = [Path(boxes_dir) / i for i in os.listdir(boxes_dir)]
+    for img_path in img_paths:
         output_path = Path(output_dir) / (img_path.name.split(".")[0] + "_filtered.png")
         img = read_image(img_path)
         obj = img_path.name.split("_")[1][:-1]

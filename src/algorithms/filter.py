@@ -24,6 +24,7 @@ def filter_red_by_lab(
     b_cond = lab[:, :, 2] < b_threshold
     lab[~(a_cond | b_cond)] = [100, 0, 0]
     rgb_filtered = color.lab2rgb(lab, illuminant="D65")
+    rgb_filtered[np.isclose(rgb_filtered, 1, atol=1e-4)] = 1.
     return (rgb_filtered * 255).astype(np.uint8)
 
 
@@ -39,6 +40,7 @@ def filter_black_by_hsv(
     v_cond = (hsv[:, :, 2] > v_threshold[0]) & (hsv[:, :, 2] < v_threshold[1])
     hsv[~(s_cond & v_cond)] = [0, 0, 1]
     rgb_filtered = color.hsv2rgb(hsv)
+    rgb_filtered[np.isclose(rgb_filtered, 1, atol=1e-4)] = 1.
     return (rgb_filtered * 255).astype(np.uint8)
 
 

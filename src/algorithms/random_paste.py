@@ -28,14 +28,16 @@ class PaintingObj:
     """
 
     def __init__(
-        self, img: NDArray[np.uint8], obj: NDArray[np.uint8], by_conflict: bool
+        self, img: NDArray[np.uint8], obj: NDArray[np.uint8], ann: int, by_conflict: bool
     ) -> None:
         """
-        If `by_conflict` is True, the object bbox would be conflict with the image's
-        foreground, else would not be conflict with foreground.
+        `ann` could be 0 (ins) or 1 (seal). If `by_conflict` is True, the object bbox
+        would be conflict with the image's foreground, else would not be conflict with
+        foreground.
         """
         self.img = img
         self.obj = obj
+        self.ann = ann
         self.by_conflict = by_conflict
 
     @property
@@ -95,7 +97,8 @@ class PaintingObj:
             loc = self.obj_loc_dic.keys()
             ys, xs = [i[0] for i in loc], [i[1] for i in loc]
             x_min, y_min, x_max, y_max = min(xs), min(ys), max(xs), max(ys)
-            return [x_min, y_min, x_max, y_max]
+            ann_label = 0 if self.ann == "inscription" else 1
+            return [ann_label, x_min, y_min, x_max, y_max]
 
     @property
     @lru_cache
@@ -143,14 +146,17 @@ class PaintingObjMulti:
         self,
         img: NDArray[np.uint8],
         obj_multi: list[NDArray[np.uint8]],
+        ann_multi: list[int],
         by_conflict_ratio: float,
     ) -> None:
         """
+        `ann_multi` could be list consist of 0 (ins) or 1 (seal). 
         The `by_conflict_ratio` parameter specifies the proportion of objects to be
         pasted such that they conflict with the foreground of the image.
         """
         self.img = img
         self.obj_multi = obj_multi
+        self.ann_multi = ann_multi
         self.by_conflict_ratio = by_conflict_ratio
 
     def random_paste(self) -> None:
@@ -162,16 +168,19 @@ class PaintingObjMulti:
 
         self.img_pasted = self.img.copy()
         self.bbox_multi = []
-        mask_multi = []
+        self.mask_multi = []
 
         for i, obj in enumerate(self.obj_multi):
-            painting_obj = PaintingObj(self.img_pasted, obj, by_conflict_multi[i])
+            painting_obj = PaintingObj(self.img_pasted, obj, self.ann_multi[i],
+                                       by_conflict_multi[i])
             if painting_obj.bbox == []:
                 print("[INFO] Dropped one object as it couldn't fit in the image")
                 continue
             self.img_pasted = painting_obj.img_pasted
             self.bbox_multi.append(painting_obj.bbox)
-            mask_multi.append(painting_obj.mask)
+            self.mask_multi.append(painting_obj.mask)
 
-        self.mask = sum(mask_multi)
-        self.mask[self.mask != 0] = 255
+        self.mask = sum(self.mask_multi)
+        if self.mask_multi != []:
+            self.mask[self.mask != 0] = 255
+        return None
