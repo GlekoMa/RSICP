@@ -48,8 +48,11 @@ cfg.DATALOADER.NUM_WORKERS = 1
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
     "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"
 )  # Let training initialize from model zoo
-cfg.SOLVER.IMS_PER_BATCH = 1
-cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
+cfg.MODEL.BACKBONE.FREEZE_AT = 2
+cfg.SOLVER.IMS_PER_BATCH = 8
+cfg.SOLVER.BASE_LR = 0.001
+cfg.SOLVER.WEIGHT_DECAY = 0.0001
+cfg.SOLVER.MOMENTUM = 0.9
 cfg.INPUT.MASK_FORMAT = "bitmask"
 cfg.SOLVER.MAX_ITER = 300  # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
 cfg.SOLVER.STEPS = []  # do not decay learning rate
