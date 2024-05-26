@@ -32,19 +32,8 @@ register_coco_instances(
     join(data_root, "val", "imgs_pasted"),
 )
 
-
-
 dataset_dicts = DatasetCatalog.get("painting_train")
 metadata = MetadataCatalog.get("painting_train")
-
-# Visualize the ori annotations
-os.makedirs("ori_imgs_anns")
-for d in random.sample(dataset_dicts, 3):
-    img = read_image(d["file_name"])
-    visualizer = Visualizer(img[:, :, ::-1], metadata=metadata, scale=0.5)
-    out = visualizer.draw_dataset_dict(d)
-    img_anns_name = f"ori_imgs_anns/{basename(d['file_name']).split('.')[0]}_anns.png"
-    plt.imsave(img_anns_name, out.get_image()[:, :, ::-1])
 
 
 # Train
@@ -59,7 +48,7 @@ cfg.DATALOADER.NUM_WORKERS = 1
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
     "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"
 )  # Let training initialize from model zoo
-cfg.SOLVER.IMS_PER_BATCH = (1)
+cfg.SOLVER.IMS_PER_BATCH = 1
 cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
 cfg.INPUT.MASK_FORMAT = "bitmask"
 cfg.SOLVER.MAX_ITER = 300  # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
@@ -72,10 +61,6 @@ trainer = DefaultTrainer(cfg)
 trainer.resume_or_load(resume=False)
 trainer.train()
 
-# Commented out IPython magic to ensure Python compatibility.
-# Look at training curves in tensorboard:
-# %load_ext tensorboard
-# %tensorboard --logdir output
 
 # Inference & evaluation using the trained model
 # ==============================================
@@ -90,8 +75,12 @@ predictor = DefaultPredictor(cfg)
 dataset_dicts = DatasetCatalog.get("painting_val")
 metadata = MetadataCatalog.get("painting_val")
 
+evaluator = COCOEvaluator("painting_val", output_dir="./output")
+val_loader = build_detection_test_loader(cfg, "painting_val")
+print(inference_on_dataset(predictor.model, val_loader, evaluator))
+
 # Visualize the pred annotations
-os.makedirs("pred_imgs_anns")
+os.makedirs("./output/pred_imgs_anns")
 for d in random.sample(dataset_dicts, 3):
     im = read_image(d["file_name"])
     outputs = predictor(
@@ -104,11 +93,7 @@ for d in random.sample(dataset_dicts, 3):
         instance_mode=ColorMode.IMAGE_BW,  # remove the colors of unsegmented pixels. This option is only available for segmentation models
     )
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    img_anns_name = f"pred_imgs_anns/{basename(d['file_name']).split('.')[0]}_anns.png"
+    img_anns_name = (
+        f"./output/pred_imgs_anns/{basename(d['file_name']).split('.')[0]}_anns.png"
+    )
     plt.imsave(img_anns_name, out.get_image()[:, :, ::-1])
-
-
-evaluator = COCOEvaluator("painting_val", output_dir="./output")
-val_loader = build_detection_test_loader(cfg, "painting_val")
-print(inference_on_dataset(predictor.model, val_loader, evaluator))
-# another equivalent way to evaluate the model is to use `trainer.test`
